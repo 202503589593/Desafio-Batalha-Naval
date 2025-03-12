@@ -1,0 +1,75 @@
+#include <stdio.h>
+#define TAMANHO 10
+#define TAM_HAB 5
+
+// Função para inicializar o tabuleiro
+void inicializarTabuleiro(int tabuleiro[TAMANHO][TAMANHO]) {
+    for (int i = 0; i < TAMANHO; i++) {
+        for (int j = 0; j < TAMANHO; j++) {
+            tabuleiro[i][j] = 0; // 0 representa água
+        }
+    }
+    // Posicionando um navio fictício para exibição
+    tabuleiro[4][4] = 3;
+    tabuleiro[5][4] = 3;
+}
+
+// Função para aplicar uma matriz de habilidade ao tabuleiro
+void aplicarHabilidade(int tabuleiro[TAMANHO][TAMANHO], int habilidade[TAM_HAB][TAM_HAB], int origemX, int origemY) {
+    for (int i = 0; i < TAM_HAB; i++) {
+        for (int j = 0; j < TAM_HAB; j++) {
+            int x = origemX + i - TAM_HAB / 2;
+            int y = origemY + j - TAM_HAB / 2;
+            
+            if (x >= 0 && x < TAMANHO && y >= 0 && y < TAMANHO && habilidade[i][j] == 1) {
+                tabuleiro[x][y] = 5; // 5 representa área afetada
+            }
+        }
+    }
+}
+
+// Função para exibir o tabuleiro
+void exibirTabuleiro(int tabuleiro[TAMANHO][TAMANHO]) {
+    for (int i = 0; i < TAMANHO; i++) {
+        for (int j = 0; j < TAMANHO; j++) {
+            printf("%d ", tabuleiro[i][j]);
+        }
+        printf("\n");
+    }
+}
+
+int main() {
+    int tabuleiro[TAMANHO][TAMANHO];
+    inicializarTabuleiro(tabuleiro);
+    
+    int cone[TAM_HAB][TAM_HAB] = {
+        {0, 0, 1, 0, 0},
+        {0, 1, 1, 1, 0},
+        {1, 1, 1, 1, 1},
+        {0, 0, 0, 0, 0},
+        {0, 0, 0, 0, 0}
+    };
+
+    int cruz[TAM_HAB][TAM_HAB] = {
+        {0, 0, 1, 0, 0},
+        {0, 0, 1, 0, 0},
+        {1, 1, 1, 1, 1},
+        {0, 0, 1, 0, 0},
+        {0, 0, 1, 0, 0}
+    };
+
+    int octaedro[TAM_HAB][TAM_HAB] = {
+        {0, 0, 1, 0, 0},
+        {0, 1, 1, 1, 0},
+        {1, 1, 1, 1, 1},
+        {0, 1, 1, 1, 0},
+        {0, 0, 1, 0, 0}
+    };
+
+    aplicarHabilidade(tabuleiro, cone, 2, 2);
+    aplicarHabilidade(tabuleiro, cruz, 6, 6);
+    aplicarHabilidade(tabuleiro, octaedro, 4, 4);
+
+    exibirTabuleiro(tabuleiro);
+    return 0;
+}
